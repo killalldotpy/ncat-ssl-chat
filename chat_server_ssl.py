@@ -4,7 +4,7 @@ import ssl
 
 clients = []
 clients_lock = threading.Lock()
-PASSWORD = "hej123"  # Byt detta till det lösenord du vill använda
+PASSWORD = ""  # set pw
 
 def broadcast(message, client_socket=None):
     with clients_lock:
@@ -19,7 +19,7 @@ def broadcast(message, client_socket=None):
 def handle_client(client_socket, addr):
     name = None
     try:
-        # Be om klientens lösenord
+        # asking for pw
         client_socket.send(b'Enter the password: ')
         password = client_socket.recv(1024).decode().strip()
         if password != PASSWORD:
@@ -27,10 +27,10 @@ def handle_client(client_socket, addr):
             client_socket.close()
             return
 
-        # Skicka välkomstmeddelande
+        # message
         client_socket.send(b'This is NRG cryptchat - type /help for available commands\n')
 
-        # Be om klientens namn
+        # name
         client_socket.send(b'Enter your name: ')
         name = client_socket.recv(1024).decode().strip()
         welcome_message = f'{name} has joined the chat!\n'.encode()
